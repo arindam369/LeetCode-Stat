@@ -24,6 +24,7 @@ export default function App({ Component, pageProps }) {
       <meta property="og:image" itemProp="image" content="https://lc-stat.netlify.app/favicon.ico"/>
       <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
       <link rel="icon" type="image/x-icon" href="favicon.ico" />
+      <link rel="manifest" href="manifest.json" />
     </Head>
     <Component {...pageProps} />
    </>
