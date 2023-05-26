@@ -11,14 +11,28 @@ export default function UserDetails({id, onDelete}){
         mediumSolved: "",
         hardSolved: "",
         acceptanceRate: "",
-        todaySubmissionCount: ""
+        latestSubmissionCount: "",
+        latestSubmissionTime: ""
     });
+
+    const convertUnixTimestampToDate = (unixTimestamp)=>{
+        const dateTime = new Date(unixTimestamp * 1000);
+        const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+        const year = dateTime.getFullYear();
+        const month = months[dateTime.getMonth()];
+        const date = dateTime.getDate();
+        const requiredDate = date + '/' + month + '/' + year;
+        return requiredDate;
+    }
 
     useEffect(()=>{
         axios.get(`${process.env.NEXT_PUBLIC_LEETCODE_API_URL}/${id}`).then((response)=>{
             if(response.data.status === "success"){
                 const submissions = response.data.submissionCalendar;
-              setUserDetails(
+                const latestSubmissionCount = submissions[Object.keys(submissions)[Object.keys(submissions).length - 1]];
+                const latestSubmissionTime = convertUnixTimestampToDate(Object.keys(submissions)[Object.keys(submissions).length - 1]);
+
+                setUserDetails(
                 {...UserDetails, 
                     totalSolved: response.data.totalSolved,
                     easySolved: response.data.easySolved,
@@ -26,7 +40,8 @@ export default function UserDetails({id, onDelete}){
                     hardSolved: response.data.hardSolved,
                     hardSolved: response.data.hardSolved,
                     acceptanceRate: response.data.acceptanceRate,
-                    todaySubmissionCount: submissions[Object.keys(submissions)[Object.keys(submissions).length - 1]]
+                    latestSubmissionCount: latestSubmissionCount,
+                    latestSubmissionTime: latestSubmissionTime
                 })
             }
           }).catch((err)=>{
@@ -41,11 +56,12 @@ export default function UserDetails({id, onDelete}){
                 <div className={styles.userIdDiv}>
                     <Link className={styles.userId} href={`https://leetcode.com/${id}`} target="_blank">{id}</Link>
                 </div>
-                <div className={styles.easySolved}>Easy Solved: &emsp;{userDetails.easySolved}/{userDetails.totalSolved}</div>
-                <div className={styles.mediumSolved}>Medium Solved: &emsp;{userDetails.mediumSolved}/{userDetails.totalSolved}</div>
-                <div className={styles.hardSolved}>Hard Solved: &emsp;{userDetails.hardSolved}/{userDetails.totalSolved}</div>
-                <div className={styles.acceptanceRate}>Acceptance Rate: &emsp;{userDetails.acceptanceRate}%</div>
-                <div className={styles.todaySubmissionCount}>Today Submission Count: &emsp;{userDetails.todaySubmissionCount}</div>
+                <div className={styles.easySolved}>Easy Solved: &emsp;{userDetails.easySolved && <span>{userDetails.easySolved}/{userDetails.totalSolved}</span>}</div>
+                <div className={styles.mediumSolved}>Medium Solved: &emsp; {userDetails.mediumSolved && <span>{userDetails.mediumSolved}/{userDetails.totalSolved}</span>}</div>
+                <div className={styles.hardSolved}>Hard Solved: &emsp; {userDetails.hardSolved && <span>{userDetails.hardSolved}/{userDetails.totalSolved}</span>}</div>
+                <div className={styles.acceptanceRate}>Acceptance Rate: &emsp; {userDetails.acceptanceRate && <span>{userDetails.acceptanceRate}%</span>}</div>
+                <div className={styles.todaySubmissionCount}>Latest Submission: &emsp;
+                    <span className={styles.submissionCount}>{userDetails.latestSubmissionCount}</span> {userDetails.latestSubmissionTime && <span className={styles.submissionTime}>({userDetails.latestSubmissionTime})</span>}</div>
             </div>
         </>
     )

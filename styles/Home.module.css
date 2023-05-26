@@ -56,8 +56,10 @@
 .todaySubmissionCount{
   color: rgb(128, 49, 0);
   font-weight: 700;
-  margin-top: 15px;
-  font-size: 1.2rem;
+  margin-top: 10px;
+  font-size: .9rem;
+  display: flex;
+  align-items: center;
 }
 .searchBox{
   display: flex;
@@ -92,4 +94,14 @@
   color: rgb(204, 200, 200);
   letter-spacing: 3px;
   word-spacing: 10px;
+}
+.submissionCount{
+  font-size: 1.5rem;
+  color: red;
+  margin: 0px 6px 0px 0px;
+}
+.submissionTime{
+  font-size: .75rem;
+  color: rgb(151, 149, 149);
+  margin-left: 20px;
 }
